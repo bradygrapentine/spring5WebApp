@@ -26,24 +26,30 @@ public class BootstrapData implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Author eric = new Author("Eric", "Evans");
         Book ddd = new Book("Domain Driven Design", "123123");
+        Author rod = new Author("Rod", "Johnson");
+        Book noEJB = new Book("J2EE Development without EJB", "654321");
+        Publisher udemy = new Publisher("Udemy", "123 Fake Street", "Faketown", "FS", "12345");
+
+        publisherRepository.save(udemy);
 
         eric.getBooks().add(ddd);
         ddd.getAuthors().add(eric);
 
+        ddd.setPublisher(udemy);
+        udemy.getBooks().add(ddd);
+
         authorRepository.save(eric);
         bookRepository.save(ddd);
-
-        Author rod = new Author("Rod", "Johnson");
-        Book noEJB = new Book("J2EE Development without EJB", "654321");
+        publisherRepository.save(udemy);
 
         rod.getBooks().add(noEJB);
         noEJB.getAuthors().add(rod);
 
+        noEJB.setPublisher(udemy);
+        udemy.getBooks().add(noEJB);
+
         authorRepository.save(rod);
         bookRepository.save(noEJB);
-
-        Publisher udemy = new Publisher("Udemy", "123 Fake Street", "Faketown", "FS", "12345");
-
         publisherRepository.save(udemy);
 
         System.out.println("Book Count: " + bookRepository.count());
@@ -51,5 +57,7 @@ public class BootstrapData implements CommandLineRunner {
         System.out.println("Author Count: " + authorRepository.count());
 
         System.out.println("Publisher Count: " + publisherRepository.count());
+
+        System.out.println("Publisher Book Count: " + udemy.getBooks().size());
     }
 }
